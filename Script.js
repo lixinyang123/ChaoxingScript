@@ -15,7 +15,7 @@ var config = {
     complete: false,			//答题标记
     temp: null					//分配标记
 },
-    player = null, cannel = "公网1", subjectlist = new Array();
+player = null, cannel = "公网1", subjectlist = new Array();
 
 
 //检测是否存在播放器
