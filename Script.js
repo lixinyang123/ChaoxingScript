@@ -32,7 +32,7 @@ function check_player() {
         else {
             //如果下方还有视频
             if (config.No <= videoCount - 1) {
-                //寻找文档中id为video_html5_api的元素并赋值给player
+                //寻找播放器
                 player = $("iframe").contents().find("iframe").contents().find('video#video_html5_api')[config.No];
                 //间隔指定时间后执行check_player
                 setTimeout(check_player, config.time * 0.5);
@@ -408,26 +408,7 @@ function answer(context, ans, lable) {
                 }
             }
         }
-        // //单选题
-        // if (choices.length != 2) {
-        //     for (let i = 0; i < choices.length; i++) {
-        //         choice = choices[i].getElementsByTagName("a")[0];
-        //         tmp = choice.innerText.trim();
-        //         if (tmp==ans) {
-        //             choice.click();
-        //         }
-        //     }
-        // }
-        // //判断题
-        // else {
-        //     for (let i = 0; i < choices.length; i++) {
-        //         choice = choices[i].getElementsByTagName("b")[0];
-        //         tmp = choice.className.trim();
-        //         if (tmp==ans) {
-        //             choice.click();
-        //         }
-        //     }
-        // }
+
         config.complete = true;
         if (!lable) {
             setTimeout(completed, config.time * 0.6);
@@ -446,14 +427,7 @@ function answer(context, ans, lable) {
             choices[Math.floor(Math.random() + 0.5)]
                 .getElementsByTagName("b")[0].click();
         }
-        // if (choices.length > 2){
-        //     choices[Math.floor(Math.random() * (choices.length - 0.1))]
-        //         .getElementsByTagName("a")[0].click();
-        // }
-        // else{
-        //     choices[Math.floor(Math.random() + 0.5)]
-        //         .getElementsByTagName("b")[0].click();
-        // }
+
         config.complete = true;
         if (!lable) {
             setTimeout(completed, config.time * 0.6);
