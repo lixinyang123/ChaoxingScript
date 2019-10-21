@@ -128,7 +128,7 @@ function changePlayLine() {
 
 //获取视频播放状态
 function getvideostatue() {
-    console.log("检测视频状态")
+    console.log("检测视频状态");
     var frame = document.getElementsByTagName('iframe')[0];
     var doc = frame.contentWindow.document;
     var videostatue = doc.getElementsByClassName('ans-attach-ct').item(config.No);
