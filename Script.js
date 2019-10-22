@@ -164,53 +164,7 @@ function getsubjectstatue() {
 
 //点开始刷课按钮（脚本入口）
 function btn_start() {
-    check_page();
-}
-
-//检测自身所在页面并执行相应脚本
-function check_page() {
-    try {
-        //判断当前所在页面
-        var currentpage = null;
-
-        try {
-            currentpage = document.getElementsByClassName("currents")[0].id;
-        }
-        catch (err) {
-            if (document.getElementById("dct1").className.indexOf("currents") > 0) {
-                currentpage = "dct1";
-            }
-            else if (document.getElementById("dct2").className.indexOf("currents") > 0) {
-                currentpage = "dct2";
-            }
-            else {
-                currentpage = "dct3";
-            }
-        }
-
-        let blk = document.getElementById(currentpage);
-
-        if (blk.title == "章节测验" || blk.title == "作业" || blk.title == "测验" || blk.title == "练习题") {
-            config.changing = false;
-            player = undefined;
-            //开始答题
-            config.dctNum = 1;
-            setTimeout(change_to_answer, config.time * 1.0);
-        }
-        else {
-            if (!config.isStart) //如果播放状态为未播放
-            {
-                config.dctNum = 1;
-                //间隔指定时间后执行change_page.CheckPlayer方法
-                setTimeout(change_page, config.time * 1.0);
-            }
-        }
-    }
-    catch (err) {
-        //无dct页面，直接播放视频
-        console.log(err.message);
-        NoDctPlayer();
-    }
+    change_page();
 }
 
 //更改课程
