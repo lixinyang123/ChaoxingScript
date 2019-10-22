@@ -201,7 +201,8 @@ function check_page() {
             if (!config.isStart) //如果播放状态为未播放
             {
                 config.dctNum = 1;
-                setTimeout(change_page, config.time * 1.0); //间隔指定时间后执行change_page.CheckPlayer方法
+                //间隔指定时间后执行change_page.CheckPlayer方法
+                setTimeout(change_page, config.time * 1.0);
             }
         }
     }
@@ -260,19 +261,12 @@ function change_to_answer() {
         //获取播放视频页面
         var dctAnswer = config.dctVideo + 1;
         var blk = document.getElementById("dct" + dctAnswer);
-        //如果是章节检测
-        if (blk.title == "章节测验" || blk.title == "作业" || blk.title == "测验" || blk.title == "练习题" || blk.title == "") {
-            blk.click();
-            config.changing = false;
-            player = undefined;
-            //开始答题
-            setTimeout(distribute, config.time * 5.0);
-        }
-        //如果不是章节检测切换到第三个页面
-        else {
-            config.dctNum++;
-            setTimeout(change_to_answer, 500);
-        }
+        
+        blk.click();
+        config.changing = false;
+        player = undefined;
+        //开始答题
+        setTimeout(distribute, config.time * 5.0);
     }
     catch (err) {
         console.warn(err.message);
