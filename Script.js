@@ -177,7 +177,7 @@ function change_course() {
             ncells[i].id = i;
         }
 
-        var id = document.getElementsByClassName("currents")[1].parentElement.id;
+        var id = document.getElementById("coursetree").getElementsByClassName("currents")[0].parentElement.id;
         id++;
         document.getElementById(id).children[0].getElementsByTagName("a")[0].click();
 
@@ -533,6 +533,7 @@ function upload_complate() {
 
 
 function NoDctPlayer() {
+    console.log("NoDctPlayer");
     config.isChanged = false;
 
     var videoCount = $("iframe").contents().find("iframe").contents().find('video#video_html5_api').length;
@@ -547,7 +548,7 @@ function NoDctPlayer() {
 
         changePlayLine();
 
-        if (!GetNoDctPlayState()) {
+        if (!getvideostatue()) {
             setTimeout(NoDctPlayer, config.time * 1);
         }
         //如果视频播放完成
@@ -560,56 +561,13 @@ function NoDctPlayer() {
             //无下方视频，恢复当前视频索引并跳转
             else {
                 config.No = 0;
-                setTimeout(nodct_change_course, config.time * 5);
+                setTimeout(change_course, config.time * 5);
             }
         }
     }
     //无视频直接跳转
     else {
         config.No = 0;
-        setTimeout(nodct_change_course, config.time * 5);
-    }
-
-
-}
-
-//获取视频播放状态
-function GetNoDctPlayState() {
-    console.log("nodct检测视频状态")
-    var frame = document.getElementsByTagName('iframe')[0];
-    var doc = frame.contentWindow.document;
-    var videostatue = doc.getElementsByClassName('ans-attach-ct').item(config.No);
-
-    if (videostatue.children[0].id == "ext-gen1040") {
-        var statue = videostatue.className;
-        if (statue.indexOf("ans-job-finished") == -1) {
-            console.log("nodct视频未完成");
-            return false;
-        }
-        console.log("nodct视频已完成");
-        return true;
-    }
-    else {
-        console.log("nodct没有任务点");
-        return true;
-    }
-}
-
-function nodct_change_course() {
-    console.log("nodct跳转课程");
-    if (!config.isChanged) {
-
-        var ncells = document.getElementsByClassName("ncells");
-        for (var i = 0; i < ncells.length; i++) {
-            ncells[i].id = i;
-        }
-
-        var id = document.getElementsByClassName("currents")[0].parentElement.id;
-        id++;
-        document.getElementById(id).children[0].getElementsByTagName("a")[0].click();
-
-        config.isChanged = true;
-        setTimeout(change_page, config.time * 5);
-
+        setTimeout(change_course, config.time * 5);
     }
 }
