@@ -46,7 +46,6 @@ function check_player() {
                 if (config.temp == null) {
                     //是否自动答题
                     if (config.auto_answer) {
-                        config.dctNum = 1;
                         config.temp = setTimeout(change_to_answer, config.time * 1.5);
                     }
                     else {
@@ -133,19 +132,13 @@ function getvideostatue() {
     var doc = frame.contentWindow.document;
     var videostatue = doc.getElementsByClassName('ans-attach-ct').item(config.No);
 
-    if (videostatue.children[0].id == "ext-gen1040") {
-        var statue = videostatue.className;
-        if (statue.indexOf("ans-job-finished") == -1) {
-            console.log("视频未完成");
-            return false;
-        }
-        console.log("视频已完成");
-        return true;
+    var statue = videostatue.className;
+    if (statue.indexOf("ans-job-finished") == -1) {
+        console.log("视频未完成");
+        return false;
     }
-    else {
-        console.log("没有任务点");
-        return true;
-    }
+    console.log("视频已完成");
+    return true;
 }
 
 //获取答题状态
@@ -211,6 +204,7 @@ function change_page() {
 
 //切换到检测页面
 function change_to_answer() {
+    config.dctNum = 1;
     try {
         //获取播放视频页面
         var dctAnswer = config.dctVideo + 1;
