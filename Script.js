@@ -127,32 +127,44 @@ function changePlayLine() {
 
 //获取视频播放状态
 function getvideostatue() {
-    console.log("检测视频状态");
-    var frame = document.getElementsByTagName('iframe')[0];
-    var doc = frame.contentWindow.document;
-    var videostatue = doc.getElementsByClassName('ans-attach-ct').item(config.No);
+    try {
+        console.log("检测视频状态");
+        var frame = document.getElementsByTagName('iframe')[0];
+        var doc = frame.contentWindow.document;
+        var videostatue = doc.getElementsByClassName('ans-attach-ct').item(config.No);
 
-    var statue = videostatue.className;
-    if (statue.indexOf("ans-job-finished") == -1) {
-        console.log("视频未完成");
-        return false;
+        var statue = videostatue.className;
+        if (statue.indexOf("ans-job-finished") == -1) {
+            console.log("视频未完成");
+            return false;
+        }
+        console.log("视频已完成");
+        return true;
+    } 
+    catch (error) {
+        console.log("获取视频状态异常，跳过此视频");
+        return true;
     }
-    console.log("视频已完成");
-    return true;
 }
 
 //获取答题状态
 function getsubjectstatue() {
-    var frame = document.getElementsByTagName('iframe')[0];
-    var doc = frame.contentWindow.document;
-    var subjectstatue = doc.getElementsByClassName("ans-attach-ct").item(0);
-    var statue = subjectstatue.className;
-    if (statue.indexOf("ans-job-finished") == -1) {
-        console.log("检测未完成");
-        return false;
+    try {
+        var frame = document.getElementsByTagName('iframe')[0];
+        var doc = frame.contentWindow.document;
+        var subjectstatue = doc.getElementsByClassName("ans-attach-ct").item(0);
+        var statue = subjectstatue.className;
+        if (statue.indexOf("ans-job-finished") == -1) {
+            console.log("检测未完成");
+            return false;
+        }
+        console.log("检测已完成");
+        return true;
+    } 
+    catch (error) {
+        console.log("获取答题状态异常，跳过此答题页");
+        return true;
     }
-    console.log("检测已完成");
-    return true;
 }
 
 //点开始刷课按钮（脚本入口）
