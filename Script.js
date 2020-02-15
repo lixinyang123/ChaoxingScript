@@ -50,8 +50,7 @@ function check_player() {
                     }
                     else {
                         //跳转到下一个视频
-                        config.temp = null;
-                        setTimeout(change_course, config.time * 1.0);
+                        setTimeout(change_course, config.time * 5);
                     }
                 }
             }
@@ -188,6 +187,9 @@ function change_course() {
 
         config.isChanged = true;
         config.dctNum = 1;
+        subjectlist = [];
+        config.No = 0;
+        config.temp = null;
         setTimeout(change_page, config.time * 2.5);
 
     }
@@ -229,7 +231,7 @@ function change_to_answer() {
         setTimeout(distribute, config.time * 5.0);
     }
     catch (err) {
-        console.warn(err.message);
+        setTimeout(change_course, config.time * 5);
     }
 }
 
@@ -280,10 +282,7 @@ function distribute() {
     }
     //检测已完成
     else {
-        subjectlist = [];
-        config.No = 0;
-        config.temp = null;
-        setTimeout(change_course, config.time * 5.0);
+        setTimeout(change_course, config.time * 5);
     }
 }
 
@@ -496,10 +495,7 @@ function get_right_answer() {
 
     }
     else {
-        subjectlist = [];
-        config.No = 0;
-        config.temp = null;
-        setTimeout(change_course, config.time * 5.0);
+        setTimeout(change_course, config.time * 5);
     }
 
 }
@@ -566,14 +562,12 @@ function NoDctPlayer() {
             }
             //无下方视频，恢复当前视频索引并跳转
             else {
-                config.No = 0;
                 setTimeout(change_course, config.time * 5);
             }
         }
     }
     //无视频直接跳转
     else {
-        config.No = 0;
-        setTimeout(change_course, config.time * 5);
+        distribute();
     }
 }
