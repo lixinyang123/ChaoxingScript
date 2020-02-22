@@ -300,7 +300,7 @@ function get_answer(context, q, lable) {
 
 //查找答案
 function degelate_get(context, q, lable) {
-    var url = "https://www.lllxy.net/cxtk/getsubject.ashx?question=" + q;
+    var url = "https://www.ccczg.site/cxtk/getTopic?question=" + q;
 
     var finalurl = encodeURI(url);
 
@@ -503,7 +503,7 @@ function get_right_answer() {
 //上传答案
 function upload_answer(q, a) {
 
-    var url = "https://www.lllxy.net/cxtk/uploadsubject.ashx?question=" + q + "&answer=" + a;
+    var url = "https://www.ccczg.site/cxtk/insertTopic?question=" + q + "&answer=" + a;
 
     var finalurl = encodeURI(url);
 
