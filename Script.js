@@ -300,7 +300,7 @@ function get_answer(context, q, lable) {
 
 //查找答案
 function degelate_get(context, q, lable) {
-    var url = "https://www.ccczg.site/cxtk/getTopic?question=" + q;
+    var url = "https://www.ccczg.site/cxtk/getTopic?keyword=" + q;
 
     var finalurl = encodeURI(url);
 
