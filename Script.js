@@ -312,7 +312,7 @@ function degelate_get(context, q, lable) {
         async: true,
         jsonpCallback: "jsonpCallback",
         success: function(data) {
-            get_state(context, data, lable);
+            answer(context, data, lable);
         },
         error: function() {
             console.log("error");
@@ -321,24 +321,9 @@ function degelate_get(context, q, lable) {
 
 }
 
-
-//判断get状态并选择答题方式
-function get_state(context, ans, lable) {
-    console.info("a:" + ans);
-    if (ans != null) {
-        console.info("按答案选择");
-        answer(context, ans, lable);
-    }
-    else {
-        console.info("随机选择");
-        answer(context, null, lable);
-    }
-}
-
-
 //选择答案
 function answer(context, ans, lable) {
-    let choices, choice, tmp;
+    let choices, choice, tmp, isChoiced = false;
     choices = context.children[1].getElementsByTagName("li");
     if (ans != null) {
         //选择题
@@ -348,6 +333,7 @@ function answer(context, ans, lable) {
                 tmp = choice.innerText.trim();
                 if (tmp == ans) {
                     choice.click();
+                    isChoiced = true;
                 }
             }
         }
@@ -358,36 +344,49 @@ function answer(context, ans, lable) {
                 tmp = choice.className.trim();
                 if (tmp == ans) {
                     choice.click();
+                    isChoiced = true;
                 }
             }
         }
 
-        config.complete = true;
-        if (!lable) {
-            setTimeout(completed, config.time * 0.6);
+        if(isChoiced){
+            console.log("按答案选择");
+            config.complete = true;
+            if (!lable) {
+                setTimeout(completed, config.time * 0.6);
+            }
+            else {
+                setTimeout(post_answer, config.time * 5.0);
+            }
         }
-        else {
-            setTimeout(post_answer, config.time * 5.0);
+        else{
+            console.log("答案与选项不匹配，随机选择");
+            randomAnswer(choices,lable);
         }
     }
-    //随机答题
     else {
-        try {
-            choices[Math.floor(Math.random() * (choices.length - 0.1))]
-                .getElementsByTagName("a")[0].click();
-        }
-        catch (error) {
-            choices[Math.floor(Math.random() + 0.5)]
-                .getElementsByTagName("b")[0].click();
-        }
+        console.log("题库无答案，随机选择");
+        randomAnswer(choices,lable);
+    }
+}
 
-        config.complete = true;
-        if (!lable) {
-            setTimeout(completed, config.time * 0.6);
-        }
-        else {
-            setTimeout(post_answer, config.time * 5.0);
-        }
+//随机答题
+function randomAnswer(choices,lable){
+    try {
+        choices[Math.floor(Math.random() * (choices.length - 0.1))]
+            .getElementsByTagName("a")[0].click();
+    }
+    catch (error) {
+        choices[Math.floor(Math.random() + 0.5)]
+            .getElementsByTagName("b")[0].click();
+    }
+
+    config.complete = true;
+    if (!lable) {
+        setTimeout(completed, config.time * 0.6);
+    }
+    else {
+        setTimeout(post_answer, config.time * 5.0);
     }
 }
 
