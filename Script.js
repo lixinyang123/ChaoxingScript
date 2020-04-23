@@ -15,7 +15,7 @@ var config = {
     complete: false,			//答题标记
     temp: null					//分配标记
 },
-player = null, cannel = "公网1", subjectlist = new Array();
+player = null, cannel = "公网1";
 
 
 //检测是否存在播放器
@@ -187,7 +187,6 @@ function change_course() {
 
         config.isChanged = true;
         config.dctNum = 1;
-        subjectlist = [];
         config.No = 0;
         config.temp = null;
         setTimeout(change_page, config.time * 2.5);
@@ -290,11 +289,6 @@ function distribute() {
 function get_answer(context, q, lable) {
     console.log("q:" + q);
     q = q.trim();
-
-    //将题目存入列表
-    console.log("保存题目");
-    subjectlist[config.No] = q;
-
     degelate_get(context, q, lable);
 }
 
