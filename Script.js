@@ -154,10 +154,10 @@ function getsubjectstatue() {
         var subjectstatue = doc.getElementsByClassName("ans-attach-ct").item(0);
         var statue = subjectstatue.className;
         if (statue.indexOf("ans-job-finished") == -1) {
-            console.log("检测未完成");
+            console.warn("检测未完成");
             return false;
         }
-        console.log("检测已完成");
+        console.warn("检测已完成");
         return true;
     } 
     catch (error) {
@@ -313,6 +313,8 @@ function degelate_get(context, q, lable) {
 
 //选择答案
 function answer(context, ans, lable) {
+    console.log("a:"+ans);
+
     let choices, choice, tmp, isChoiced = false;
     choices = context.children[1].getElementsByTagName("li");
     if (ans != null) {
@@ -329,7 +331,7 @@ function answer(context, ans, lable) {
         }
         //判断题
         catch (error) {
-            if(ans.includes("是")){
+            if(ans.includes("是")||ans.includes("正确")||ans.includes("对")){
                 ans = "ri";
             }
             else{
