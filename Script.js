@@ -305,8 +305,7 @@ function degelate_get(context, q, lable) {
             answer(context, data.data.answer, lable);
         },
         error: function() {
-            console.error("error--重新查找");
-            get_answer(context, q, lable);
+            alert("题库异常，答题功能暂时关闭");
         }
     });
 
