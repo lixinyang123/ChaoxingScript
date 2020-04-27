@@ -15,7 +15,7 @@ var config = {
     complete: false,			//答题标记
     temp: null					//分配标记
 },
-player = null, cannel = "公网1";
+player = null, cannel = "公网1", subjectlist = new Array();
 
 
 //检测是否存在播放器
@@ -154,10 +154,10 @@ function getsubjectstatue() {
         var subjectstatue = doc.getElementsByClassName("ans-attach-ct").item(0);
         var statue = subjectstatue.className;
         if (statue.indexOf("ans-job-finished") == -1) {
-            console.warn("检测未完成");
+            console.log("检测未完成");
             return false;
         }
-        console.warn("检测已完成");
+        console.log("检测已完成");
         return true;
     } 
     catch (error) {
@@ -187,6 +187,7 @@ function change_course() {
 
         config.isChanged = true;
         config.dctNum = 1;
+        subjectlist = [];
         config.No = 0;
         config.temp = null;
         setTimeout(change_page, config.time * 2.5);
@@ -289,23 +290,32 @@ function distribute() {
 function get_answer(context, q, lable) {
     console.log("q:" + q);
     q = q.trim();
+
+    //将题目存入列表
+    console.log("保存题目");
+    subjectlist[config.No] = q;
+
     degelate_get(context, q, lable);
 }
 
 //查找答案
 function degelate_get(context, q, lable) {
-    var url = "https://www.lllxy.net/cxtkproxy?" + q;
+    var url = "https://www.ccczg.site/cxtk/getTopic?keyword=" + q;
 
     var finalurl = encodeURI(url);
 
     $.ajax({
         type: 'GET',
         url: finalurl,
+        dataType: 'jsonp',
+        jsonp: "callback",
+        async: true,
+        jsonpCallback: "jsonpCallback",
         success: function(data) {
-            answer(context, data.data.answer, lable);
+            answer(context, data, lable);
         },
         error: function() {
-            document.getElementsByTagName("h1").item(0).innerText = "题库异常，答题功能暂时关闭.....";
+            console.log("error");
         }
     });
 
@@ -331,13 +341,6 @@ function answer(context, ans, lable) {
         }
         //判断题
         catch (error) {
-            if(ans.includes("是")||ans.includes("正确")||ans.includes("对")){
-                ans = "ri";
-            }
-            else{
-                ans = "wr";
-            }
-
             for (let i = 0; i < choices.length; i++) {
                 choice = choices[i].getElementsByTagName("b")[0];
                 tmp = choice.className.trim();
@@ -406,12 +409,127 @@ function confirm_sub() {
         try {
             $("iframe").contents().find("iframe").contents().find("iframe").contents()
                 .find("div.con03")[0].getElementsByTagName("a")[0].click();
-            setTimeout(change_course, config.time * 5);
+            setTimeout(get_right_answer, config.time * 10.0);
         }
         catch (err) {
-            setTimeout(change_course, config.time * 5);
+            setTimeout(get_right_answer, config.time * 10.0);
         }
     }
+}
+
+
+
+function get_right_answer() {
+
+    document.getElementsByTagName("h1").item(0).innerText = "正在将正确答案存入服务器.....";
+
+    //获取题目列表
+    var doc;
+    doc = document.getElementsByTagName("iframe")[0].contentWindow.document;
+    doc = doc.getElementsByTagName("iframe")[0].contentWindow.document;
+    doc = doc.getElementsByTagName("iframe")[0].contentWindow.document;
+    var TiMu = doc.getElementsByClassName("TiMu");
+
+    if (config.No < TiMu.length) {
+
+        //type为题目类型 true为选择题，false为判断题
+        var result, mark, type = true;
+        //选择题
+        try {
+            result = TiMu[config.No].children[1].getElementsByTagName('div').item(0);
+            mark = result.getElementsByTagName("i").item(0).className;
+        }
+        //判断题
+        catch (error) {
+            mark = TiMu[config.No].children[1].getElementsByTagName('i').item(1).className;
+            type = false;
+        }
+
+        if (mark == "fr cuo") {
+            console.log("答案错误");
+            setTimeout(function() { upload_complate() }, 2000);
+        }
+        else {
+            console.log("答案正确");
+
+            //获取题目
+            var q = subjectlist[config.No];
+            console.log("q:" + q);
+
+            //获取选择题答案
+            if (type) {
+                //获取答案
+                var select = TiMu[config.No].children[1].getElementsByTagName('div').item(0).children[0].innerText;
+                select = select.charAt(select.length - 1);
+
+                //获取选项的列表
+                var selects = TiMu[config.No].children[1].getElementsByTagName('li');
+                for (var j = 0; j < selects.length; j++) {
+                    var sel = selects[j].getElementsByTagName("i").item(0).innerText;
+                    if (sel.indexOf(select) != -1) {
+                        //获取正确选项的答案
+                        var a = selects[j].getElementsByTagName("a").item(0).innerText;
+                        console.log("a:" + a);
+
+                        setTimeout(function() { upload_answer(q, a) }, 2000);
+                    }
+
+                }
+            }
+            //获取判断题答案
+            else {
+                var a = TiMu[config.No].children[1].children[0].getElementsByTagName('i')[0].innerText;
+                //判断正确为 ri错误为 wr
+                if (a == "√") {
+                    a = "ri";
+                }
+                else {
+                    a = "wr";
+                }
+                console.log("a:" + a);
+
+                setTimeout(function() { upload_answer(q, a) }, 2000);
+
+            }
+
+        }
+
+    }
+    else {
+        setTimeout(change_course, config.time * 5);
+    }
+
+}
+
+//上传答案
+function upload_answer(q, a) {
+
+    var url = "https://www.ccczg.site/cxtk/insertTopic?question=" + q + "&answer=" + a;
+
+    var finalurl = encodeURI(url);
+
+    $.ajax({
+        type: 'GET',
+        url: finalurl,
+        dataType: 'jsonp',
+        async: 'true',
+        jsonp: "callback",
+        jsonpCallback: "jsonpCallback",
+        success: function(data) {
+            console.log(data);
+            setTimeout(function() { upload_complate() }, 2000);
+        },
+        error: function() {
+            console.log("error");
+            setTimeout(function() { upload_complate() }, 2000);
+        }
+    });
+}
+
+//上传完成
+function upload_complate() {
+    config.No++;
+    get_right_answer();
 }
 
 //==============================================================
