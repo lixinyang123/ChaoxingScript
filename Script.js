@@ -305,7 +305,7 @@ function degelate_get(context, q, lable) {
             answer(context, data.data.answer, lable);
         },
         error: function() {
-            alert("题库异常，答题功能暂时关闭");
+            document.getElementsByTagName("h1").item(0).innerText = "题库异常，答题功能暂时关闭.....";
         }
     });
 
